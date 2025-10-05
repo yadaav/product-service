@@ -1,0 +1,26 @@
+[
+    {
+      "id": "p1",
+      "title": "Blue T-Shirt",
+      "price": 19.99,
+      "currency": "USD",
+      "image": "https://example.com/images/blue-tshirt.jpg",
+      "category": "Apparel"
+    },
+    {
+      "id": "p2",
+      "title": "Wireless Mouse",
+      "price": 29.99,
+      "currency": "USD",
+      "image": "https://example.com/images/mouse.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": "p3",
+      "title": "Laptop",
+      "price": 999.99,
+      "currency": "USD",
+      "image": "https://example.com/images/laptop.jpg",
+      "category": "Electronics"
+    }
+  ]

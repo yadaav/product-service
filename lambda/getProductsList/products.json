@@ -1,0 +1,82 @@
+[
+    {
+      "id": "b6f1f5e8-8a4b-4e2b-9a5b-59c92e9db59c",
+      "title": "Blue T-Shirt",
+      "price": 19.99,
+      "currency": "USD",
+      "image": "https://example.com/images/blue-tshirt.jpg",
+      "category": "Apparel"
+    },
+    {
+      "id": "3e5f278c-4a47-4a34-b0f1-8e96d6b47d4d",
+      "title": "Wireless Mouse",
+      "price": 29.99,
+      "currency": "USD",
+      "image": "https://example.com/images/mouse.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": "f7cb3b13-2f3a-4a53-bca1-84b6a7cdd7e6",
+      "title": "Laptop",
+      "price": 999.99,
+      "currency": "USD",
+      "image": "https://example.com/images/laptop.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": "1a35f67e-d77c-40b9-8c76-2f89f4585f0c",
+      "title": "Running Shoes",
+      "price": 59.99,
+      "currency": "USD",
+      "image": "https://example.com/images/running-shoes.jpg",
+      "category": "Footwear"
+    },
+    {
+      "id": "6e4a7b29-8d38-4c24-ae2b-40f3656b9310",
+      "title": "Coffee Maker",
+      "price": 79.99,
+      "currency": "USD",
+      "image": "https://example.com/images/coffee-maker.jpg",
+      "category": "Home Appliances"
+    },
+    {
+      "id": "f5b99b8e-5e33-4038-9132-01a2f471e6f5",
+      "title": "Smartphone",
+      "price": 699.99,
+      "currency": "USD",
+      "image": "https://example.com/images/smartphone.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": "ad1b20a2-0347-43f3-9fa4-8dfb19bde48c",
+      "title": "Backpack",
+      "price": 39.99,
+      "currency": "USD",
+      "image": "https://example.com/images/backpack.jpg",
+      "category": "Accessories"
+    },
+    {
+      "id": "cb2f9677-1f25-4b64-b5cb-4c0a6d7fa42d",
+      "title": "Desk Lamp",
+      "price": 24.99,
+      "currency": "USD",
+      "image": "https://example.com/images/desk-lamp.jpg",
+      "category": "Home & Living"
+    },
+    {
+      "id": "e3a4a970-0b53-4c49-9df5-bbcb5d5fcd32",
+      "title": "Wireless Headphones",
+      "price": 149.99,
+      "currency": "USD",
+      "image": "https://example.com/images/headphones.jpg",
+      "category": "Electronics"
+    },
+    {
+      "id": "98a2c847-4d8d-474c-b7fa-6e27ebd10e5b",
+      "title": "Water Bottle",
+      "price": 14.99,
+      "currency": "USD",
+      "image": "https://example.com/images/water-bottle.jpg",
+      "category": "Sports"
+    }
+  ]

@@ -1,0 +1,48 @@
+{
+  "version": "48.0.0",
+  "files": {
+    "161ce4a368ef085cf44343312a86539f6b28404c1a4a76ad51033e6c3d9ba483": {
+      "displayName": "getProductsList/Code",
+      "source": {
+        "path": "asset.161ce4a368ef085cf44343312a86539f6b28404c1a4a76ad51033e6c3d9ba483",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region-57b7e2b2": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "161ce4a368ef085cf44343312a86539f6b28404c1a4a76ad51033e6c3d9ba483.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "0eec13251fb6beb346f95be0f5e0a34fca5bd40beb541b5e9ca86909b754fdb3": {
+      "displayName": "getProductsById/Code",
+      "source": {
+        "path": "asset.0eec13251fb6beb346f95be0f5e0a34fca5bd40beb541b5e9ca86909b754fdb3",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region-0f23bda3": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "0eec13251fb6beb346f95be0f5e0a34fca5bd40beb541b5e9ca86909b754fdb3.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "2066745f74cffcea8c8867a94d58b0bc54c1e322d0557b5d7c03ff7dc0cfeaef": {
+      "displayName": "ProductServiceStack Template",
+      "source": {
+        "path": "ProductServiceStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region-676a2f21": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "2066745f74cffcea8c8867a94d58b0bc54c1e322d0557b5d7c03ff7dc0cfeaef.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
