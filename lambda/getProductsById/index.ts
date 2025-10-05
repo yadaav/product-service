@@ -1,63 +1,23 @@
-import fs from 'fs';
-import path from 'path';
+const { DynamoDBClient } = require('@aws-sdk/client-dynamodb');
+const { DynamoDBDocumentClient, GetCommand } = require('@aws-sdk/lib-dynamodb');
 
-const productsPath = path.join(__dirname, 'products.json');
+const client = new DynamoDBClient({});
+const ddb = DynamoDBDocumentClient.from(client);
 
-export type Product = {
-  id: string;
-  title: string;
-  price: number;
-  currency: string;
-  image: string;
-  category: string;
-};
+const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE_NAME;
+const STOCK_TABLE = process.env.STOCK_TABLE_NAME;
 
-let products: Product[] = [];
-try {
-  const raw = fs.readFileSync(productsPath, 'utf8');
-  products = JSON.parse(raw) as Product[];
-  console.log('Loaded products count:', products.length);
-} catch (err) {
-  console.error('Failed to load products.json', err);
-  products = [];
-}
+import { APIGatewayProxyEvent } from 'aws-lambda';
 
-interface APIGatewayEvent {
-  pathParameters?: { productId?: string };
-  // include other fields if you want to test locally
-}
+exports.handler = async (event: APIGatewayProxyEvent) => {
+  const id = event.pathParameters && event.pathParameters.productId;
+  if (!id) return { statusCode: 400, body: JSON.stringify({ message: 'Missing productId' }) };
 
-export const handler = async (event: APIGatewayEvent) => {
-  console.log('EVENT', JSON.stringify(event));
-  const productId = event.pathParameters?.productId ?? null;
-  console.log('productId resolved:', productId);
+  const productRes = await ddb.send(new GetCommand({ TableName: PRODUCTS_TABLE, Key: { id } }));
+  if (!productRes.Item) return { statusCode: 404, body: JSON.stringify({ message: 'Product not found' }) };
 
-  if (!productId) {
-    return {
-      statusCode: 400,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ message: 'Missing productId in path' })
-    };
-  }
-
-  const normalizedId = String(productId).trim().toLowerCase();
-  const product = products.find(p =>
-    [p.id, (p as any).productId, (p as any).sku, (p as any).slug]
-      .filter(Boolean)
-      .some(v => String(v).trim().toLowerCase() === normalizedId)
-  );
-
-  if (!product) {
-    return {
-      statusCode: 404,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ message: 'Product not found' })
-    };
-  }
-
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-    body: JSON.stringify(product)
-  };
+  const stockRes = await ddb.send(new GetCommand({ TableName: STOCK_TABLE, Key: { product_id: id } }));
+  const count = stockRes.Item ? stockRes.Item.count : 0;
+  const joined = { ...productRes.Item, count };
+  return { statusCode: 200, headers: { 'Content-Type':'application/json','Access-Control-Allow-Origin':'*' }, body: JSON.stringify(joined) };
 };
