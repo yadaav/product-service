@@ -1,2 +1,2 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
-export declare const handler: APIGatewayProxyHandler;
+import { APIGatewayProxyResult } from 'aws-lambda';
+export declare const handler: () => Promise<APIGatewayProxyResult>;
