@@ -514,7 +514,7 @@
     "aws:cdk:path": "ProductServiceStack/ProductServiceApi/Resource"
    }
   },
-  "ProductServiceApiDeployment696F4D072fb88833d8612c0ef6f1663fdeb6e32d": {
+  "ProductServiceApiDeployment696F4D079237897079983c97bee03b99b3ec4fcc": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -541,7 +541,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "ProductServiceApiDeployment696F4D072fb88833d8612c0ef6f1663fdeb6e32d"
+     "Ref": "ProductServiceApiDeployment696F4D079237897079983c97bee03b99b3ec4fcc"
     },
     "RestApiId": {
      "Ref": "ProductServiceApiFE734E24"
@@ -562,9 +562,9 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
         "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'GET,POST'"
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'"
        },
        "StatusCode": "204"
       }
@@ -626,9 +626,9 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
         "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'GET,POST'"
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'"
        },
        "StatusCode": "204"
       }
@@ -816,9 +816,9 @@
      "IntegrationResponses": [
       {
        "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
         "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'GET,POST'"
+        "method.response.header.Access-Control-Allow-Methods": "'GET,POST,OPTIONS'"
        },
        "StatusCode": "204"
       }
@@ -1125,7 +1125,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1XW0/bMBT+LcsjMhljlwfeCrsIbYyK9Q0h5ManqcGxPdsBZVH/+45vaTs0Rid1A4mn2N+5+Fx94v1y/9Xbcu8FvbW7FbveFXxa9t8cra4JQpc96yRtFJuWEzoVcEgtnF8QQZspo2X/sZWV40qe94VppeMNFAfFTkGKOZVMgEm7SrFMmCWJrzTxLkhfUMY+yBtulGxAuuLgPLDuFBd/JD7qU2FVwTbs2AbxghzNZM6rX4/BNNxa3C0Ip03ZnykBmHBqbdsAO+yKg77QhsuKaypGVaXawd/I4wVGQV/yuWiopDWwsRK84mDx/H4N60Ym8WZrJ2qcj4gcXiZRHVbr/FgKLmGgDY7eS7xf77ODT93Bv6WGJvBOkwiH9simTJSn3LHwLswY3qMOfIfZtWPvwk9d/0ZwiG4M7ILY15dYY+BsOfIf3JeHbXUNLo8aVduy/6LqT0a1GqtMpOXaHfpAMJycdS0I1bxG225ph7caWDfS3E+yuBqkSMFgRlvhjpSxYwMzweu5O9W+HaxvHSqEuj01vOZ+H9vGQyfg5opFaJFqKuom70EL1fmg4IEMbGW4HtoLxTVPKwOOcrlkt6tjY6LQF15Rccx+KevHjodgLL0iWCM1hFBkaCVhgUgwdKo1VfwF8TVKYnxjxgIpD2TndKQlgEsHtaErAVYr2WuR0/AffoKv7o6zdIaC/KTTucB8lj5DdwbfW24AuWdUWPgdP16ZwSR0Q+PJ6cq02ButPVr+M5hEHlOD9efA2HyLplierGnZVAl5Dta/C9YDfNjE1Of0Pb70kQdBGyd5O6z/Ixpbcz1Mhsg5jAZk1NQsn1uaujnWhRusu4eax3NQhEYPOtPLKLyOSPhH8fOIy9oLnLZOt25BJFpWXtmXN/tvynf4mr6ynO+mZ2J5Fr8/AZ1wkeVqDwAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1XW0/bMBT+LcsjMtnGLg+8FXZDG6Nifasq5ManqcGxPdsBZVH++44vSduhMTqpG0g8xf7OxefqEx/kBy/f5C+e0Ru7X7CrfcHnefvN0eKKIHTRskbSSrF5PqFzAUfUwnRGBK3mjObth1oWjis5bTNTS8cryA6zvYxkSyqZAJN2hWI9YZEkvtLE25E2o4y9l9fcKFmBdNnhNLDuZbM/Eh/0qbCuYBd27II4I8cL2efVr8dgKm4t7jrCaZW350oAJpxaW1fAjprssM204bLgmopRUah68DfyeIFR0Jd8zioqaQlsrAQvOFg8v93AmpFJvL21EzXuj4gcXiZRHVbr8kQKLmGgDY7eSbxb75ODj93Bv6WGJvBOkwiH9uhNmShPuWXhbZgxvEcd+A6zG8fehh+7/q3gEN0Y2I7YVxdYY+BsPvIf3OdHdXEFrh81qrR5+0WVH42qNVaZSMuNO/SeYDi519URqnmJtt3QBm81sG6kuZ9kcTVIkYzBgtbCHStjxwYWgpdLd6Z9O1jfOlQIdXNmeMn9PraNh07BLRXbgD4BZWAi1KUyi8eRd6CFanyc0AYGtjBcDx2H4pqnlQFHuVyx2/VJMlHoHi+oOGG/VPpDx0MwVl4RLJsSQih6aC2HgUgwdKo2Rfwr8WVLYshjEgOpn9HO6UhLAJcOSkPXAqzWElojp+E//FBf35300j0U5CeN7mvOZ+kzNOfwveYGkHtBhYXf8eMtGkxCNzSenG5Ri+1S2+PVb4RJ5DE1WJJuKJ9Zl2J5uqFlWyXkKVj/Llj38GEbU5/S9/DSR+4FbZ3k3bD+j2jszPUwGSLnMBqQUVOzeoFp6pZYF26w7g5qP56DIjR60JkeS+HBRMJvi59HXJZe4Kx2unYdkWhZfmmfXx+8zt/iA/vScr6fXo75efz+BKa0nN19DwAA"
    },
    "Metadata": {
     "aws:cdk:path": "ProductServiceStack/CDKMetadata/Default"
