@@ -1,2 +1,27 @@
+# Node modules
 node_modules/
+
+# CDK output
 cdk.out/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# Lambda build artifacts
+lambda/importProductsFile/node_modules/
+lambda/importFileParser/node_modules/
