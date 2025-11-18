@@ -505,6 +505,262 @@
     "aws:cdk:path": "ProductServiceStack/createProduct/LogGroup/Resource"
    }
   },
+  "catalogItemsQueue79451959": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "VisibilityTimeout": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogItemsQueue/Resource"
+   }
+  },
+  "catalogItemsQueuePolicyE4B945F2": {
+   "Type": "AWS::SQS::QueuePolicy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:SendMessage"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::837282923698:role/importFileParserRole"
+       },
+       "Resource": {
+        "Fn::GetAtt": [
+         "catalogItemsQueue79451959",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Queues": [
+     {
+      "Ref": "catalogItemsQueue79451959"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogItemsQueue/Policy/Resource"
+   }
+  },
+  "catalogBatchProcessServiceRole274D33CD": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogBatchProcess/ServiceRole/Resource"
+   }
+  },
+  "catalogBatchProcessServiceRoleDefaultPolicy8FC58026": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchWriteItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":dynamodb:",
+           {
+            "Ref": "AWS::Region"
+           },
+           ":",
+           {
+            "Ref": "AWS::AccountId"
+           },
+           ":table/products"
+          ]
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:GetQueueUrl",
+        "sqs:ReceiveMessage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "catalogItemsQueue79451959",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "createProductTopic05C0E62B"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "catalogBatchProcessServiceRoleDefaultPolicy8FC58026",
+    "Roles": [
+     {
+      "Ref": "catalogBatchProcessServiceRole274D33CD"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogBatchProcess/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "catalogBatchProcessDC6613DA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "97729aa914f77d96a12061785501568977ca76d97143530acedc9274a4e9f451.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "PRODUCTS_TABLE": "products",
+      "SQS_URL": {
+       "Ref": "catalogItemsQueue79451959"
+      },
+      "SNS_TOPIC": {
+       "Ref": "createProductTopic05C0E62B"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "catalogBatchProcessServiceRole274D33CD",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "catalogBatchProcessServiceRoleDefaultPolicy8FC58026",
+    "catalogBatchProcessServiceRole274D33CD"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogBatchProcess/Resource",
+    "aws:asset:path": "asset.97729aa914f77d96a12061785501568977ca76d97143530acedc9274a4e9f451",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "catalogBatchProcessLogGroupA1CECDA2": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "catalogBatchProcessDC6613DA"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogBatchProcess/LogGroup/Resource"
+   }
+  },
+  "catalogBatchProcessSqsEventSourceProductServiceStackcatalogItemsQueue1DF43E6A4EBBBC9C": {
+   "Type": "AWS::Lambda::EventSourceMapping",
+   "Properties": {
+    "BatchSize": 5,
+    "EventSourceArn": {
+     "Fn::GetAtt": [
+      "catalogItemsQueue79451959",
+      "Arn"
+     ]
+    },
+    "FunctionName": {
+     "Ref": "catalogBatchProcessDC6613DA"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/catalogBatchProcess/SqsEventSource:ProductServiceStackcatalogItemsQueue1DF43E6A/Resource"
+   }
+  },
+  "createProductTopic05C0E62B": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/createProductTopic/Resource"
+   }
+  },
+  "emailSubscriptionA0771E59": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Endpoint": "mahendra_yadav@epam.com",
+    "Protocol": "email",
+    "TopicArn": {
+     "Ref": "createProductTopic05C0E62B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ProductServiceStack/emailSubscription/Resource"
+   }
+  },
   "ProductServiceApiFE734E24": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
@@ -1125,7 +1381,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1XW0/bMBT+LcsjMtnGLg+8FXZDG6Nifasq5ManqcGxPdsBZVH++44vSduhMTqpG0g8xf7OxefqEx/kBy/f5C+e0Ru7X7CrfcHnefvN0eKKIHTRskbSSrF5PqFzAUfUwnRGBK3mjObth1oWjis5bTNTS8cryA6zvYxkSyqZAJN2hWI9YZEkvtLE25E2o4y9l9fcKFmBdNnhNLDuZbM/Eh/0qbCuYBd27II4I8cL2efVr8dgKm4t7jrCaZW350oAJpxaW1fAjprssM204bLgmopRUah68DfyeIFR0Jd8zioqaQlsrAQvOFg8v93AmpFJvL21EzXuj4gcXiZRHVbr8kQKLmGgDY7eSbxb75ODj93Bv6WGJvBOkwiH9uhNmShPuWXhbZgxvEcd+A6zG8fehh+7/q3gEN0Y2I7YVxdYY+BsPvIf3OdHdXEFrh81qrR5+0WVH42qNVaZSMuNO/SeYDi519URqnmJtt3QBm81sG6kuZ9kcTVIkYzBgtbCHStjxwYWgpdLd6Z9O1jfOlQIdXNmeMn9PraNh07BLRXbgD4BZWAi1KUyi8eRd6CFanyc0AYGtjBcDx2H4pqnlQFHuVyx2/VJMlHoHi+oOGG/VPpDx0MwVl4RLJsSQih6aC2HgUgwdKo2Rfwr8WVLYshjEgOpn9HO6UhLAJcOSkPXAqzWElojp+E//FBf35300j0U5CeN7mvOZ+kzNOfwveYGkHtBhYXf8eMtGkxCNzSenG5Ri+1S2+PVb4RJ5DE1WJJuKJ9Zl2J5uqFlWyXkKVj/Llj38GEbU5/S9/DSR+4FbZ3k3bD+j2jszPUwGSLnMBqQUVOzeoFp6pZYF26w7g5qP56DIjR60JkeS+HBRMJvi59HXJZe4Kx2unYdkWhZfmmfXx+8zt/iA/vScr6fXo75efz+BKa0nN19DwAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1YS3PbNhD+LeExAzOpk/aQm+w6jSdxrdiaycHjyUAARG0MAjAedhmO/nsWIEFRdevGySi1Jz5IIr5d7BvYFXfL3V9+LZ8/odduh/GLHQnzsj31lF0QhD62vFG01nxezuhcij3qxNk5kbSec1q2r4NiHrQ6awsblIdaFK+KpwUpllRxKWy/YppnwqLf8SfteVekLSjnB+oKrFa1UL54dZZYnxbn/0m811rFWMA27NgS8Rvd25ZF52R/oXKlkYMrJJ/qYJk4osaAqrD4PLWVyEGeU8+Wp/A521nTv/YihKwfQHF9vcb3tWLBWqFY04NWGG194j/0on5NQQYr3OByPAQ8r9amTKzKKQbphXUbqwPFbGOi+Vm18BaYQ/ULqLrgJS9vOkey4/3JQ6apsDU4h9iKAK3L9kRLgUGgzoVa8D10pS2MBcXAUDlhTIehADueuGHCBntWMRaKVoJPtQQG0V2UN8aa7OAqJ2ump1lFxxH39FSP18fyUElQYqANeb6VeLvcRwcfuoPfQ/2Jg5POfXSLdHC6HLOymY6UGzbchDnHvo6XGt4xbkPtTfihy38I1nSXecrnirgXH7F4hXflJP7gutwL7EL4PHHpypXtO139YXUwWL6yf9wYJb4HTOZkBWjQJep7H0SIreUKHMxBgm9mOBjo4EdbEg9J331xtsVlXLkcrTXb4K1C4TNtgCWOSE8rchrmjlkw/VDpI9ifbWO110xLXIoa23Jqx9xoUGNrxgJWhBqoMOrXtMEuKZyfGIijavc0uE4KLhY0SL+vrZtasZBQLf1xkuHibUOl1NfHFipQubEn6Ej4peYb0BtBeW7/q/7cdurI78JI3cQKQBu4GMzM2w0MM4inoNbsbjxezTTmCBiVh/xvV8d9x1Mw1l4RPBCVSKHI0DiPkUgwdGkYSocgVUoX8i6JiZSnVO9NR+sBLAtRWToKsB4lNCCnxRHRbq4O8+4Mpf2zxuSDE7P0VjQn4jKAjYPggkon/o0/DXpoErphUHPfeBxeBAFnv2GQtj15Si2W5DA9Ysj6WB5tSLmrEPIYrB8XrK/w4S6mPqbv/qWPfBV05yRvh/X/iMbWXE+doeMcWgMyGmrXr1gM9Uusi/UriVuouT0nQWj0ILN/9/BPn3OSBrTYn+LfcxRwHLwJfkUUWlp+cs+udl+Wv5XPn3xyADv9u5TypPv9AnyNAOtuEwAA"
    },
    "Metadata": {
     "aws:cdk:path": "ProductServiceStack/CDKMetadata/Default"

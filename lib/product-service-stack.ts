@@ -1,9 +1,15 @@
 import * as cdk from 'aws-cdk-lib';
+import * as iam from "aws-cdk-lib/aws-iam";
+
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as path from 'path';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as eventSources from 'aws-cdk-lib/aws-lambda-event-sources';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 
 export class ProductServiceStack extends cdk.Stack {
   public readonly productsApiUrl: string;
@@ -69,6 +75,58 @@ export class ProductServiceStack extends cdk.Stack {
     productsTable.grantWriteData(createProductLambda);
     stockTable.grantWriteData(createProductLambda);
     
+    // 1. Create SQS queue catalogItemsQueue
+    const catalogItemsQueue = new sqs.Queue(this, "catalogItemsQueue", {
+      visibilityTimeout: cdk.Duration.seconds(30),
+    });
+
+    // 2. Create the Lambda catalogBatchProcess
+    const catalogBatchProcess = new lambda.Function(this, "catalogBatchProcess", {
+      runtime: lambda.Runtime.NODEJS_18_X,
+      handler: "index.handler",
+      code: lambda.Code.fromAsset("lambda/catalogBatchProcess"),
+      environment: {
+        PRODUCTS_TABLE: productsTable.tableName,
+        SQS_URL: catalogItemsQueue.queueUrl,
+      },
+    });
+
+    // 3. Grant Lambda permissions
+    productsTable.grantWriteData(catalogBatchProcess);
+
+    // 4. SQS → Lambda event source (batch size = 5)
+    catalogBatchProcess.addEventSource(
+      new eventSources.SqsEventSource(catalogItemsQueue, {
+        batchSize: 5,
+      })
+    );
+
+    // --- SNS topic and email subscription ---
+    const createProductTopic = new sns.Topic(this, "createProductTopic");
+
+    new sns.Subscription(this, "emailSubscription", {
+      topic: createProductTopic,
+      protocol: sns.SubscriptionProtocol.EMAIL,
+      endpoint: "mahendra_yadav@epam.com", 
+    });
+
+    createProductTopic.grantPublish(catalogBatchProcess);
+
+    catalogBatchProcess.addEnvironment("SNS_TOPIC", createProductTopic.topicArn);
+    // --- end SNS additions ---
+
+    const importFileParser = lambda.Function.fromFunctionAttributes(this, "ImportFileParserFunction", {
+      functionArn: "arn:aws:lambda:us-east-1:837282923698:function:importFileParser",
+      role: iam.Role.fromRoleArn(
+        this,
+        "ImportFileParserRole",
+        "arn:aws:iam::837282923698:role/importFileParserRole",
+        { mutable: false }
+      )
+    });
+
+    // 4. Permissions — allow importFileParser to send SQS messages
+    catalogItemsQueue.grantSendMessages(importFileParser);
 
     // API Gateway REST API
     const api = new apigateway.RestApi(this, 'ProductServiceApi', {
